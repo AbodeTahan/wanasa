@@ -1,0 +1,36 @@
+{
+ "name": "وَنّاسة — لعبة أسئلة السهرة",
+ "short_name": "ونّاسة",
+ "description": "لعبة أسئلة وأجوبة جماعية بين فريقين للسهرات",
+ "lang": "ar",
+ "dir": "rtl",
+ "start_url": "play.html?source=app",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "any",
+ "background_color": "#001a17",
+ "theme_color": "#001a17",
+ "categories": [
+  "games",
+  "entertainment",
+  "education"
+ ],
+ "icons": [
+  {
+   "src": "assets/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "assets/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "assets/icon-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}
