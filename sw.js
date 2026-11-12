@@ -31,8 +31,17 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // الملفات والخطوط: من الكاش أولًا
-  if (url.origin === location.origin || url.host.includes('fonts.g')) {
+  // ملفات الموقع: من الشبكة أولًا عشان التحديثات توصل فورًا، ومن الكاش لو ما في نت
+  if (url.origin === location.origin) {
+    e.respondWith(
+      fetch(req).then(res => { if (res.ok) { const copy = res.clone(); caches.open(VERSION).then(c => c.put(req, copy)); } return res; })
+        .catch(() => caches.match(req))
+    );
+    return;
+  }
+
+  // الخطوط: من الكاش أولًا
+  if (url.host.includes('fonts.g')) {
     e.respondWith(
       caches.match(req).then(hit => hit || fetch(req).then(res => {
         if (res.ok || res.type === 'opaque') { const copy = res.clone(); caches.open(VERSION).then(c => c.put(req, copy)); }
