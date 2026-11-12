@@ -1,8 +1,8 @@
 /* وَنّاسة — يخلي اللعبة تشتغل كتطبيق وحتى بدون إنترنت */
-const VERSION = 'wanasa-v5';
+const VERSION = 'wanasa-v10';
 const CORE = [
-  './', 'index.html', 'play.html', 'about.html', 'privacy.html', '404.html',
-  'assets/q1.js', 'assets/q2.js', 'assets/q3.js', 'assets/site.css', 'assets/site.js', 'assets/logo.svg',
+  './', 'index.html', 'play.html', 'about.html', 'contact.html', 'privacy.html', 'terms.html', '404.html',
+  'assets/app.js', 'assets/site.css', 'assets/site.js', 'assets/logo.svg',
   'assets/icon-192.png', 'assets/icon-512.png', 'manifest.webmanifest'
 ];
 
