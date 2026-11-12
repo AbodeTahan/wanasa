@@ -663,7 +663,75 @@ main>section:not([hidden]){animation:screenIn .55s var(--ease) both}
 @media (prefers-reduced-motion:reduce){body::before{animation:none}main>section:not([hidden]){animation:none}}
 </style>
 
-<style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style>
+<style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}
+/* ---------- غرف اللعب ---------- */
+.room-panel{border-color:rgba(255,192,77,.45)}
+.rp-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.rp-head .h2{margin:0}
+.room-net{font-size:13px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--line)}
+.room-net.ok{color:var(--good);border-color:rgba(52,211,153,.4)}
+.rp-code{display:flex;flex-direction:column;align-items:center;gap:4px;padding:18px;border-radius:20px;background:rgba(0,0,0,.25);border:1px dashed rgba(255,192,77,.45)}
+.rp-code b{font-family:var(--display);font-size:clamp(44px,9vw,64px);letter-spacing:.18em;line-height:1.1;background:linear-gradient(135deg,#ffd166,#ff9f43 55%,#ff7a59);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rp-code span{font-size:13px;color:var(--muted);overflow-wrap:anywhere;text-align:center}
+.rp-actions{display:flex;gap:10px;flex-wrap:wrap}
+.rp-players{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rp-team{padding:12px 14px;border-radius:16px;background:rgba(0,0,0,.2);border:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.rp-team.t1 strong{color:var(--t1)}.rp-team.t2 strong{color:var(--t2)}
+.rp-list{display:flex;flex-wrap:wrap;gap:6px}
+.rp-list span{font-size:13px;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.07);animation:pop .35s var(--ease)}
+.rp-list em{font-size:13px;color:var(--muted)}
+.room-chip{align-self:center;font-size:13.5px;font-weight:700;padding:7px 16px;border-radius:999px;background:rgba(255,192,77,.12);border:1px solid rgba(255,192,77,.45);color:var(--gold)}
+.buzz-box{margin:0 22px 10px;padding:10px 14px;border-radius:14px;text-align:center;font-weight:700;font-size:15px;background:rgba(255,255,255,.05);border:1px dashed var(--line);color:var(--muted)}
+.buzz-box.hit{animation:bounce .5s;border-style:solid;color:#fff}
+.buzz-box.hit.t1{background:rgba(255,93,122,.2);border-color:var(--t1)}.buzz-box.hit.t2{background:rgba(56,217,198,.18);border-color:var(--t2)}
+body.player .nav-actions #homeBtn,body.player .nav-actions #histBtn,body.player .nav-actions #helpBtn{display:none}
+.player-view{width:100%;max-width:560px;margin:0 auto;gap:16px;min-width:0}
+.player-view>*,#plBody>*{min-width:0}
+.pl-top{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:38px}
+.pl-top .room-chip:empty{display:none}
+#plBody{display:flex;flex-direction:column;gap:14px}
+.pl-join{gap:16px}
+.pl-join .h1{margin:0;font-size:clamp(28px,7vw,40px)}
+.pl-lbl{display:flex;flex-direction:column;gap:8px;font-weight:600}
+.pl-lbl input{width:100%;min-width:0;font:inherit;font-size:20px;font-weight:700;color:var(--text);background:rgba(0,0,0,.28);border:1px solid var(--line);border-radius:16px;padding:14px 16px;text-align:center}
+#plCode{font-family:var(--display);letter-spacing:.25em;font-size:28px}
+.pl-lbl input:focus{outline:none;border-color:rgba(255,192,77,.7);box-shadow:0 0 0 4px rgba(255,192,77,.15)}
+.pl-err{margin:0;color:var(--bad);font-weight:600}
+.pl-teams{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pl-team{display:flex;flex-direction:column;align-items:center;gap:2px;padding:16px 10px;border-radius:18px;border:2px solid var(--line);background:rgba(255,255,255,.04);font-family:var(--display);font-weight:800;font-size:19px;transition:transform .2s,border-color .2s,background .2s}
+.pl-team small{font-family:var(--body);font-size:12px;color:var(--muted);font-weight:500}
+.pl-team.t1.on{border-color:var(--t1);background:rgba(255,93,122,.16)}.pl-team.t2.on{border-color:var(--t2);background:rgba(56,217,198,.14)}
+.pl-team.on{transform:scale(1.03)}
+.pl-me{text-align:center;font-size:15px;color:var(--muted)}
+.pl-me b{color:var(--text)}.pl-me.t1 b{color:var(--t1)}.pl-me.t2 b{color:var(--t2)}
+.pl-score{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pl-s{padding:12px;border-radius:18px;text-align:center;background:rgba(255,255,255,.05);border:1px solid var(--line);transition:box-shadow .3s,border-color .3s}
+.pl-s small{display:block;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-s b{font-family:var(--display);font-size:30px}
+.pl-s.t1 b{color:var(--t1)}.pl-s.t2 b{color:var(--t2)}
+.pl-s.turn.t1{border-color:var(--t1);box-shadow:0 0 0 1px var(--t1),0 10px 30px -14px var(--t1)}.pl-s.turn.t2{border-color:var(--t2);box-shadow:0 0 0 1px var(--t2),0 10px 30px -14px var(--t2)}
+.player-view .panel,.player-view .panel>*{animation:none!important}
+.pl-card{gap:12px;text-align:center;align-items:center}
+.pl-card h3{margin:0;font-family:var(--display);font-size:22px}
+.pl-qmeta{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.pl-q{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(21px,5.6vw,28px);line-height:1.5}
+.pl-card .qmedia{padding:4px 0 0}
+.pl-ans{display:flex;flex-direction:column;gap:2px;padding:12px 18px;border-radius:16px;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.45);animation:pop .4s var(--ease)}
+.pl-ans small{color:var(--good);font-weight:700}.pl-ans b{font-size:19px}
+.pl-wait{display:flex;gap:7px}.pl-wait i{width:10px;height:10px;border-radius:50%;background:var(--gold);animation:pulse 1s infinite}.pl-wait i:nth-child(2){animation-delay:.2s}.pl-wait i:nth-child(3){animation-delay:.4s}
+.buzz-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;padding:6px 0 10px}
+.buzz-wrap .mnote{text-align:center}
+.buzzer{width:min(64vw,240px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:900;font-size:clamp(26px,7vw,34px);color:#fff;
+  background:radial-gradient(circle at 35% 30%,#ff9aa9,#ff5d7a 45%,#d81b4a);box-shadow:0 18px 0 #8f0f30,0 30px 60px -12px rgba(255,93,122,.8),inset 0 4px 0 rgba(255,255,255,.35);transition:transform .08s,box-shadow .08s;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.buzzer:not(:disabled){animation:buzzPulse 1.4s ease-in-out infinite}
+@keyframes buzzPulse{50%{box-shadow:0 18px 0 #8f0f30,0 30px 80px -6px rgba(255,93,122,1),inset 0 4px 0 rgba(255,255,255,.35)}}
+.buzzer:active:not(:disabled){transform:translateY(14px);box-shadow:0 4px 0 #8f0f30,0 10px 30px -10px rgba(255,93,122,.8),inset 0 4px 0 rgba(255,255,255,.35)}
+.buzzer:disabled{cursor:default;filter:saturate(.35) brightness(.75)}
+.buzzer.sent{filter:none;transform:translateY(10px);box-shadow:0 8px 0 #8f0f30}
+.buzzer.won{filter:none;background:radial-gradient(circle at 35% 30%,#a7f3d0,#34d399 45%,#059669);box-shadow:0 18px 0 #065f46,0 30px 70px -10px rgba(52,211,153,.9);animation:bounce .6s}
+.buzzer.lost{filter:grayscale(.6) brightness(.7)}
+@media (max-width:640px){.rp-players{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 <div class="bubbles" id="bubbles" aria-hidden="true"></div>
@@ -694,10 +762,12 @@ main>section:not([hidden]){animation:screenIn .55s var(--ease) both}
         <button class="btn gold lg" id="newBtn">ابدأ السهرة</button>
         <button class="btn lg" id="contBtn" hidden>كمّل اللعبة</button>
         <button class="btn lg ghost" id="howBtn">طريقة اللعب</button>
+        <button class="btn lg" id="roomBtn">العب من الجوالات</button>
+        <button class="btn lg" id="joinBtn">ادخل غرفة</button>
         <button class="btn lg" id="radioBtn">راديو السهرة</button>
         <button class="btn lg" id="installBtn" hidden>ثبّت التطبيق</button>
       </div>
-      <div class="made"><span class="flag-mini" id="flagMini" aria-hidden="true"></span><span>لعبة سورية · صُنعت في <b>النبك</b>، القلمون</span></div>
+      
       <div class="stats" id="stats"></div>
     </div>
     <div class="preview" aria-hidden="true">
@@ -713,7 +783,7 @@ main>section:not([hidden]){animation:screenIn .55s var(--ease) both}
   <div class="sections" id="secCards"></div>
   <footer class="site-foot">
     <div class="sf-top">
-      <a class="sf-brand" href="./"><img src="assets/logo.svg" width="44" height="44" alt=""><span><b>وَنّاسة</b><small>لعبة أسئلة السهرة · صُنعت في النبك، سوريا</small></span></a>
+      <a class="sf-brand" href="./"><img src="assets/logo.svg" width="44" height="44" alt=""><span><b>وَنّاسة</b><small>لعبة أسئلة السهرة مع الربع</small></span></a>
       <nav class="sf-links" aria-label="روابط الموقع"><a href="./">الرئيسية</a><a href="about.html">من نحن</a><a href="contact.html">تواصل معنا</a><a href="privacy.html">سياسة الخصوصية</a><a href="terms.html">شروط الاستخدام</a></nav>
       <div class="socials"><a class="soc soc-linkedin" href="https://www.linkedin.com/in/abdulrahman-tahan-618ba6396" target="_blank" rel="noopener" aria-label="لينكدإن" title="لينكدإن"><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z" fill="none"/><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 10.5v6M8 7.5v.01M11.5 16.5v-6M11.5 13a2.5 2.5 0 0 1 5 0v3.5"/></svg></a><a class="soc soc-instagram" href="https://www.instagram.com/a.al.ta" target="_blank" rel="noopener" aria-label="إنستغرام" title="إنستغرام"><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4"/><path d="M17.3 6.7v.01"/></svg></a><a class="soc soc-snapchat" href="https://www.snapchat.com/add/t7a_n" target="_blank" rel="noopener" aria-label="سناب شات" title="سناب شات"><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c3 0 5 2.2 5 5v2.4l1.5-.5c.6 0 .9.6.4.9l-1.8 1c.5 1.7 1.8 2.9 3.3 3.3.4.1.4.6 0 .8-.9.4-1.8.6-2.3.8-.2.5 0 1.1-.6 1.2-.8.1-1.6-.3-2.6.2-.8.4-1.5 1.4-2.9 1.4s-2.1-1-2.9-1.4c-1-.5-1.8-.1-2.6-.2-.6-.1-.4-.7-.6-1.2-.5-.2-1.4-.4-2.3-.8-.4-.2-.4-.7 0-.8 1.5-.4 2.8-1.6 3.3-3.3l-1.8-1c-.5-.3-.2-.9.4-.9l1.5.5V8.5c0-2.8 2-5 5-5z"/></svg></a><a class="soc soc-facebook" href="https://www.facebook.com/share/1JiypZWpch/" target="_blank" rel="noopener" aria-label="فيسبوك" title="فيسبوك"><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.8 1.4-3.8 3.9v2.3H9v3h2.5V21"/></svg></a><a class="soc soc-wa" href="https://wa.me/966598716166" target="_blank" rel="noopener" aria-label="واتساب" title="واتساب"><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.2-3.7A8.3 8.3 0 1 1 8.6 19z"/><path d="M9.2 8.3c.3-.4.7-.4 1-.1l.9 1.6c.1.3 0 .6-.2.8l-.5.5c.4 1 1.3 1.9 2.4 2.4l.5-.5c.2-.2.5-.3.8-.2l1.6.9c.3.2.3.6 0 1-.6.8-1.6 1.1-2.5.8-2.1-.7-3.6-2.2-4.3-4.3-.3-.9 0-1.9.3-2.9z"/></svg></a><a class="soc soc-mail" href="mailto:abodealtahan11@gmail.com" aria-label="البريد الإلكتروني" title="البريد الإلكتروني"><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M4 7l8 6 8-6"/></svg></a></div>
     </div>
@@ -738,6 +808,12 @@ main>section:not([hidden]){animation:screenIn .55s var(--ease) both}
       <div class="opt"><span>وقت الإجابة</span><div class="seg" id="segTime"></div></div>
     </div>
     <p class="cnt-note" id="cntNote"></p>
+  </div>
+  <div class="panel room-panel" id="roomPanel" hidden>
+    <div class="rp-head"><div><h3 class="h2">غرفة اللعب</h3><p class="mnote">خلّي أصحابك يفتحوا الرابط من جوالاتهم، أو يكتبوا الكود من «ادخل غرفة».</p></div><span class="room-net" id="roomNet">جارِ الاتصال…</span></div>
+    <div class="rp-code"><b id="roomCode" dir="ltr"></b><span id="roomLink" dir="ltr"></span></div>
+    <div class="rp-actions"><button class="btn gold" id="roomShare" type="button">شارك رابط الغرفة</button><button class="btn ghost" id="roomClose" type="button">إلغاء الغرفة</button></div>
+    <div class="rp-players" id="roomPlayers"></div>
   </div>
   <div class="bar">
     <button class="btn ghost" id="setupBack">رجوع</button>
@@ -769,6 +845,7 @@ main>section:not([hidden]){animation:screenIn .55s var(--ease) both}
     <div class="turnbox"><span>الدور على</span><strong id="turnName"></strong><span class="vs">VS</span></div>
     <div class="team t2" id="tm1"></div>
   </div>
+  <button class="room-chip" id="roomChip" type="button" hidden></button>
   <div class="tabs" id="boardTabs" hidden></div>
   <div class="board" id="board"></div>
   <div class="board-foot">
@@ -776,6 +853,12 @@ main>section:not([hidden]){animation:screenIn .55s var(--ease) both}
     <div class="progress"><div id="prog"></div></div>
     <button class="btn sm" id="endBtn">إنهاء وإعلان الفائز</button>
   </div>
+</section>
+
+
+<section id="s-player" class="wrap player-view" hidden>
+  <div class="pl-top"><span class="room-chip" id="plCodeTop"></span><button class="btn sm ghost" id="plLeave" type="button">خروج</button></div>
+  <div id="plBody"></div>
 </section>
 
 
@@ -807,6 +890,7 @@ main>section:not([hidden]){animation:screenIn .55s var(--ease) both}
         <div class="num"><b id="tSec"></b><span id="tWho"></span></div>
       </div>
     </div>
+    <div class="buzz-box" id="buzzBox" hidden></div>
     <div class="perf" id="perfBox" hidden></div>
     <div class="qtools">
       <div class="toolrow">
