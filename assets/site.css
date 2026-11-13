@@ -266,3 +266,18 @@ a.c-card:hover{transform:translateY(-4px);border-color:rgba(255,192,77,.45)}
   .mock.board{inset:4% 4% 30% 8%}.mock.q{inset:auto 2% 2% 10%}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+
+/* الخلفية: اسم اللعبة منسوج بخطوط مائلة تتحرك ببطء، واسم كبير مفرّغ */
+.namebg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;-webkit-mask-image:radial-gradient(ellipse at 50% 35%,#000 25%,rgba(0,0,0,.35) 80%);mask-image:radial-gradient(ellipse at 50% 35%,#000 25%,rgba(0,0,0,.35) 80%)}
+.nrows{position:absolute;inset:-40%;transform:rotate(-12deg);display:flex;flex-direction:column;justify-content:center;gap:30px}
+.nr{display:flex;align-items:center;gap:30px;white-space:nowrap;width:max-content;font-family:var(--display);font-weight:900;font-size:46px;line-height:1.1;color:rgba(255,255,255,.04);animation:nslide var(--dur) linear infinite}
+.nr.rev{animation-direction:reverse;margin-inline-start:-140px}
+.nr b{color:rgba(255,192,77,.09);font-size:.8em}
+.nr:nth-child(3n) span:nth-of-type(3n){color:rgba(255,192,77,.075)}
+.nr:nth-child(4n+1) span:nth-of-type(5n){color:rgba(255,93,122,.06)}
+@keyframes nslide{to{transform:translateX(33%)}}
+.nbig{position:absolute;left:50%;bottom:-7vw;transform:translateX(-50%);font-family:var(--display);font-weight:900;font-size:32vw;line-height:1;white-space:nowrap;color:transparent;-webkit-text-stroke:1.5px rgba(255,192,77,.11)}
+@media (max-width:640px){.nr{font-size:30px;gap:20px}.nrows{gap:22px}}
+@media (prefers-reduced-motion:reduce){.nr{animation:none}}
+.mark-wide{height:44px;width:auto;display:block;filter:drop-shadow(0 8px 22px rgba(255,138,61,.45));transition:transform .35s var(--ease)}
+.brand:hover .mark-wide,a:hover>.mark-wide{transform:rotate(-3deg) scale(1.04)}

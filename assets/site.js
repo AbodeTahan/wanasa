@@ -1,5 +1,9 @@
 /* وَنّاسة · تفاعل الموقع */
 (function(){
+var nameBg=function(){if(document.querySelector('.namebg'))return;const n=document.createElement('div');n.className='namebg';n.setAttribute('aria-hidden','true');
+ let rows='';for(let r=0;r<16;r++)rows+='<div class="nr'+(r%2?' rev':'')+'" style="--dur:'+(70+(r%4)*18)+'s">'+'<span>وَنّاسة</span><b>؟</b>'.repeat(16)+'</div>';
+ n.innerHTML='<div class="nrows">'+rows+'</div><div class="nbig">وَنّاسة</div>';document.body.prepend(n)}
+  nameBg();
   var RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var top=document.querySelector('.topbar');
   function onScroll(){if(top)top.classList.toggle('scrolled',scrollY>12)}
