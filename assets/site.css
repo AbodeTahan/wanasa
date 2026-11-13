@@ -281,3 +281,13 @@ a.c-card:hover{transform:translateY(-4px);border-color:rgba(255,192,77,.45)}
 @media (prefers-reduced-motion:reduce){.nr{animation:none}}
 .mark-wide{height:44px;width:auto;display:block;filter:drop-shadow(0 8px 22px rgba(255,138,61,.45));transition:transform .35s var(--ease)}
 .brand:hover .mark-wide,a:hover>.mark-wide{transform:rotate(-3deg) scale(1.04)}
+
+/* v15 calm */
+:root{--bg:#10131f;--text:#f3f4fa;--muted:#b4b9d0}
+.bg i{opacity:.22;animation:none}.bg::after{display:none}
+.namebg{opacity:.55}.nr{animation:none!important;color:rgba(255,255,255,.028)}.nr b{color:rgba(255,184,77,.05)}.nr span{color:inherit!important}.nbig{display:none}
+.card{background:#1a1f33;backdrop-filter:none;-webkit-backdrop-filter:none}.card::before{display:none}
+.word{animation:rise .9s var(--ease) .05s both;filter:none}
+.hero-art .glow{opacity:.5;animation:none}
+.topbar.scrolled{background:rgba(16,19,31,.95);backdrop-filter:none;-webkit-backdrop-filter:none}
+.btn.primary::after{display:none}.mark-wide{filter:none}

@@ -8,7 +8,7 @@
 <meta name="author" content="م. عبد الرحمن الطحان">
 <meta name="copyright" content="© ٢٠٢٦ وَنّاسة · م. عبد الرحمن الطحان. جميع الحقوق محفوظة.">
 <link rel="canonical" href="https://abodetahan.github.io/wanasa/play.html">
-<meta name="theme-color" content="#0b0a17">
+<meta name="theme-color" content="#10131f">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ونّاسة">
 <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
@@ -747,6 +747,123 @@ body.player .nav-actions #homeBtn,body.player .nav-actions #histBtn,body.player 
 .mark-wide{height:44px;width:auto;display:block;filter:drop-shadow(0 8px 22px rgba(255,138,61,.45));transition:transform .35s var(--ease)}
 .brand:hover .mark-wide,a:hover>.mark-wide{transform:rotate(-3deg) scale(1.04)}
 
+
+/* ================= v15 · تهدئة التصميم + الغرف ================= */
+:root{--bg:#10131f;--bg2:#141829;--surface:#1a1f33;--surface2:#232a44;--line:rgba(255,255,255,.09);--text:#f3f4fa;--muted:#b4b9d0;--gold:#ffb84d;--gold2:#ff9a3d;--t1:#ff6b81;--t2:#3fd0c0}
+body{background:var(--bg);font-size:17px}
+body::before,body::after{display:none}
+.namebg{opacity:.55;-webkit-mask-image:linear-gradient(180deg,#000,transparent 85%);mask-image:linear-gradient(180deg,#000,transparent 85%)}
+.nr{animation:none!important;color:rgba(255,255,255,.028)}.nr b{color:rgba(255,184,77,.05)}.nr span{color:inherit!important}.nbig{display:none}
+.panel,.sec-card,.cat-btn,.col,.station,.hrow,.tcard,.pv-card,.score-card,.team{background:var(--surface);backdrop-filter:none;-webkit-backdrop-filter:none;border-color:var(--line)}
+.qcard{background:var(--surface);box-shadow:0 30px 80px -30px rgba(0,0,0,.7)}
+.spot::before,.preview::before{display:none}
+.wordmark{animation:none;filter:none;background:linear-gradient(100deg,#ffd27a,#ff9f43 60%,#ff7a59);-webkit-background-clip:text;background-clip:text}
+.btn.gold{background:linear-gradient(180deg,#ffc35c,#ff9f43);box-shadow:0 8px 20px -10px rgba(255,150,60,.6)}
+.btn.gold:hover:not(:disabled){box-shadow:0 10px 24px -10px rgba(255,150,60,.75)}
+.btn:disabled{opacity:.45;cursor:default;transform:none!important}
+.nav{background:rgba(16,19,31,.92);backdrop-filter:none;-webkit-backdrop-filter:none;border-bottom:1px solid var(--line)}
+.mark-wide{filter:none}
+.tile:hover:not(:disabled){box-shadow:none}
+.cat-btn:hover:not(:disabled),.sec-card:hover{transform:translateY(-2px)}
+main>section:not([hidden]){animation:fade .3s both}
+.mnote{font-size:15px}
+
+/* الغرف */
+.player-view{max-width:920px}
+.r-stack{display:flex;flex-direction:column;gap:14px}
+.r-center{text-align:center;align-items:center}
+.r-entry{max-width:480px;margin:0 auto;width:100%}
+.r-lbl{display:flex;flex-direction:column;gap:8px;font-weight:600}
+.r-lbl input,.r-tname{width:100%;min-width:0;font:inherit;font-size:19px;font-weight:700;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:13px 16px;text-align:center}
+#rCode{font-family:var(--display);letter-spacing:.25em;font-size:26px}
+.r-lbl input:focus,.r-tname:focus,.reg-card input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,184,77,.2)}
+.r-err{margin:0;color:var(--bad);font-weight:600}
+.r-code{align-items:center;gap:8px;text-align:center}
+.r-code small{color:var(--muted)}
+.r-code b{font-family:var(--display);font-size:clamp(42px,10vw,64px);letter-spacing:.2em;line-height:1.1;color:var(--gold)}
+.r-teams{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.r-team{gap:12px;border-top:4px solid var(--line)}
+.r-team.t1{border-top-color:var(--t1)}.r-team.t2{border-top-color:var(--t2)}
+.r-team.mine{box-shadow:0 0 0 2px var(--gold)}
+.r-thead{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.r-thead strong{font-family:var(--display);font-size:21px}
+.r-thead span{color:var(--muted);font-size:14px;white-space:nowrap}
+.r-tname{font-size:17px;padding:8px 12px;text-align:start}
+.r-chips{display:flex;flex-wrap:wrap;gap:6px;min-height:34px}
+.r-chips span{font-size:14.5px;padding:5px 12px;border-radius:999px;background:var(--surface2)}
+.r-chips span.me{background:var(--gold);color:var(--ink);font-weight:700}
+.r-chips span.off{opacity:.45}
+.r-chips em{color:var(--muted);font-size:14px}
+.r-opt{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-weight:600}
+.r-seg{display:flex;gap:6px}
+.r-seg button{min-width:56px;padding:8px 14px;border-radius:999px;background:var(--surface2);border:1px solid var(--line);font-weight:700}
+.r-seg button.on{background:var(--gold);color:var(--ink);border-color:transparent}
+.r-wait{display:flex;gap:7px;justify-content:center}.r-wait i{width:10px;height:10px;border-radius:50%;background:var(--gold);animation:pulse 1s infinite}.r-wait i:nth-child(2){animation-delay:.2s}.r-wait i:nth-child(3){animation-delay:.4s}
+.r-score{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.r-s{padding:12px 14px;border-radius:18px;text-align:center;background:var(--surface);border:2px solid var(--line);transition:border-color .25s}
+.r-s small{display:block;font-size:14px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.r-s b{font-family:var(--display);font-size:32px;line-height:1.2}
+.r-s.t1 b{color:var(--t1)}.r-s.t2 b{color:var(--t2)}
+.r-s.turn.t1{border-color:var(--t1)}.r-s.turn.t2{border-color:var(--t2)}
+.r-h{margin:0;font-family:var(--display);font-size:clamp(19px,3.2vw,24px)}
+.r-cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.r-cat{padding:12px 10px;border-radius:14px;background:var(--surface2);border:2px solid transparent;font-weight:600;font-size:15px;line-height:1.4}
+.r-cat:disabled{opacity:.55}
+.r-cat.sel{opacity:1;background:var(--gold);color:var(--ink)}
+.r-cat.sel.t1{background:var(--t1);color:#2a0710}.r-cat.sel.t2{background:var(--t2);color:#05201d}
+.r-cat:not(:disabled):hover{border-color:var(--gold)}
+.r-toss{align-items:center;text-align:center;gap:14px;padding:44px 20px}
+.r-toss small{color:var(--muted);font-size:16px}
+.r-spin{display:flex;gap:18px;font-family:var(--display);font-weight:900;font-size:clamp(24px,5vw,36px);animation:rspin 2.8s ease-out both}
+.r-spin span{animation:rflash .36s steps(1) 7}.r-spin span:last-child{animation-delay:.18s}
+@keyframes rflash{50%{opacity:.25}}
+@keyframes rspin{85%{opacity:1;max-height:80px}100%{opacity:0;max-height:0}}
+.r-toss strong{font-family:var(--display);font-weight:900;font-size:clamp(26px,6vw,44px);animation:pop .5s var(--ease) 2.8s both}
+.t1{--tc:var(--t1)}.t2{--tc:var(--t2)}
+.r-toss .t1,.r-toss .t2{color:var(--tc)}
+.r-board{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.r-col{padding:14px;gap:12px;text-align:center}
+.r-col strong{font-family:var(--display);font-size:17px;min-height:2.6em;display:grid;place-items:center;line-height:1.3}
+.r-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.r-tile{padding:14px 0;border-radius:14px;background:var(--surface2);border:1px solid var(--line);font-family:var(--display);font-weight:800;font-size:20px;color:var(--gold);transition:transform .15s,background .15s}
+.r-tile:not(:disabled):hover{transform:translateY(-2px);background:#2c3454}
+.r-tile:disabled{cursor:default}
+.r-tile:disabled:not(.used){opacity:.6}
+.r-tile.used{background:transparent;color:var(--muted);border-style:dashed}
+.r-tile.used.t1{background:rgba(255,107,129,.16);color:var(--t1);border:1px solid var(--t1)}.r-tile.used.t2{background:rgba(63,208,192,.14);color:var(--t2);border:1px solid var(--t2)}
+.r-q{gap:14px}
+.r-meta{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center}
+.r-time.low{background:var(--bad);color:#fff;border-color:transparent}
+.r-bar{height:6px;border-radius:99px;background:var(--surface2);overflow:hidden}
+.r-bar i{display:block;height:100%;width:100%;background:var(--gold);border-radius:99px;transition:width .2s linear}
+.r-qt{margin:6px 0;font-family:var(--display);font-weight:800;font-size:clamp(21px,3.6vw,32px);line-height:1.55;text-align:center;text-wrap:balance}
+.r-q .qmedia{padding:0}
+.r-msg{margin:0;text-align:center;font-weight:700;font-size:15.5px;padding:9px 14px;border-radius:12px;background:var(--surface2);border-inline-start:4px solid var(--tc,var(--gold))}
+.r-msg.steal{background:rgba(255,184,77,.14);color:var(--gold)}
+.r-msg.rev{border-color:var(--good);font-size:17px}
+.r-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.r-opt-b{min-height:66px;padding:12px 16px;border-radius:16px;background:var(--surface2);border:2px solid var(--line);font-weight:700;font-size:17px;line-height:1.5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center;transition:transform .12s,border-color .15s,background .15s}
+.r-opt-b:not(:disabled):hover{border-color:var(--gold)}
+.r-opt-b:not(:disabled):active{transform:scale(.97)}
+.r-opt-b:disabled{cursor:default}
+.r-opt-b small{font-size:12.5px;font-weight:600;opacity:.85}
+.r-opt-b.ok{background:rgba(52,211,153,.2);border-color:var(--good);color:#d6ffe9}
+.r-opt-b.bad{background:rgba(251,113,133,.16);border-color:var(--bad);color:#ffd9de}
+.r-opt-b.hid{opacity:.25;text-decoration:line-through}
+.r-helps,.r-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.r-cup{font-size:64px;line-height:1}
+.r-end{gap:14px;padding:36px 20px}
+/* التسجيل */
+#regOverlay{z-index:80}
+.reg-card{width:100%;max-width:440px;margin:auto;background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:28px 24px;display:flex;flex-direction:column;gap:14px;text-align:center}
+.reg-card img{margin:0 auto}
+.reg-card h2{margin:0;font-family:var(--display);font-size:26px}
+.reg-card p{margin:0;color:var(--muted);font-size:15px}
+.reg-card label{display:flex;flex-direction:column;gap:6px;font-weight:600;text-align:start}
+.reg-card input{font:inherit;font-size:17px;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.reg-card .r-err{min-height:1.4em;text-align:center}
+.reg-card small{color:var(--muted);font-size:12.5px}.reg-card small a{color:var(--gold)}
+@media (max-width:640px){.r-teams{grid-template-columns:1fr}.r-opts{grid-template-columns:1fr}.r-board{grid-template-columns:1fr 1fr}.r-col{padding:10px}.r-tile{font-size:17px;padding:11px 0}.r-cats{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -778,7 +895,7 @@ body.player .nav-actions #homeBtn,body.player .nav-actions #histBtn,body.player 
         <button class="btn gold lg" id="newBtn">ابدأ السهرة</button>
         <button class="btn lg" id="contBtn" hidden>كمّل اللعبة</button>
         <button class="btn lg ghost" id="howBtn">طريقة اللعب</button>
-        <button class="btn lg" id="roomBtn">العب من الجوالات</button>
+        <button class="btn lg" id="roomBtn">أنشئ غرفة</button>
         <button class="btn lg" id="joinBtn">ادخل غرفة</button>
         <button class="btn lg" id="radioBtn">راديو السهرة</button>
         <button class="btn lg" id="installBtn" hidden>ثبّت التطبيق</button>
@@ -825,12 +942,6 @@ body.player .nav-actions #homeBtn,body.player .nav-actions #histBtn,body.player 
     </div>
     <p class="cnt-note" id="cntNote"></p>
   </div>
-  <div class="panel room-panel" id="roomPanel" hidden>
-    <div class="rp-head"><div><h3 class="h2">غرفة اللعب</h3><p class="mnote">خلّي أصحابك يفتحوا الرابط من جوالاتهم، أو يكتبوا الكود من «ادخل غرفة».</p></div><span class="room-net" id="roomNet">جارِ الاتصال…</span></div>
-    <div class="rp-code"><b id="roomCode" dir="ltr"></b><span id="roomLink" dir="ltr"></span></div>
-    <div class="rp-actions"><button class="btn gold" id="roomShare" type="button">شارك رابط الغرفة</button><button class="btn ghost" id="roomClose" type="button">إلغاء الغرفة</button></div>
-    <div class="rp-players" id="roomPlayers"></div>
-  </div>
   <div class="bar">
     <button class="btn ghost" id="setupBack">رجوع</button>
     <button class="btn gold lg" id="toPick">التالي: اختيار الفئات</button>
@@ -861,7 +972,6 @@ body.player .nav-actions #homeBtn,body.player .nav-actions #histBtn,body.player 
     <div class="turnbox"><span>الدور على</span><strong id="turnName"></strong><span class="vs">VS</span></div>
     <div class="team t2" id="tm1"></div>
   </div>
-  <button class="room-chip" id="roomChip" type="button" hidden></button>
   <div class="tabs" id="boardTabs" hidden></div>
   <div class="board" id="board"></div>
   <div class="board-foot">
@@ -892,6 +1002,18 @@ body.player .nav-actions #homeBtn,body.player .nav-actions #histBtn,body.player 
 </main>
 
 
+<div class="overlay" id="regOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="regTitle">
+  <form class="reg-card" id="regForm" novalidate>
+    <img src="assets/logo.svg" width="72" height="72" alt="">
+    <h2 id="regTitle">أهلًا فيك بونّاسة</h2>
+    <p>سجّل مرة وحدة على هالجهاز، وبعدها العب على طول.</p>
+    <label>الاسم<input id="regName" maxlength="30" autocomplete="name" placeholder="اسمك"></label>
+    <label>البريد الإلكتروني<input id="regMail" type="email" inputmode="email" autocomplete="email" dir="ltr" placeholder="name@example.com"></label>
+    <p class="r-err" id="regErr" role="alert"></p>
+    <button class="btn gold lg" type="submit">سجّل وابدأ اللعب</button>
+    <small>بتسجيلك بتوافق على <a href="privacy.html" target="_blank" rel="noopener">سياسة الخصوصية</a>. ما منبيع إيميلك وما منشاركه لأغراض إعلانية.</small>
+  </form>
+</div>
 <div class="overlay" id="qOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="qText">
   <div class="qcard" id="qCard">
     <div class="qhead">
@@ -906,7 +1028,6 @@ body.player .nav-actions #homeBtn,body.player .nav-actions #histBtn,body.player 
         <div class="num"><b id="tSec"></b><span id="tWho"></span></div>
       </div>
     </div>
-    <div class="buzz-box" id="buzzBox" hidden></div>
     <div class="perf" id="perfBox" hidden></div>
     <div class="qtools">
       <div class="toolrow">
@@ -950,6 +1071,7 @@ body.player .nav-actions #homeBtn,body.player .nav-actions #histBtn,body.player 
       <li><i>٤</i><span>لكل فريق ٤ وسائل مساعدة، كل وحدة مرة: <b>دبل</b> تضاعف النقاط، <b>الحفرة</b> تخصم نفس النقاط من الخصم إذا جاوبتوا صح، <b>جوابين</b> يحق لكم فيها محاولتين، و<b>تلميح</b> يكشف أول حرف من الإجابة وعدد حروفها.</span></li>
       <li><i>٥</i><span>في قسم <b>التحدّيات</b> واحد من الفريق يمثّل أو يرسم أو يوصف أو يدندن، والباقي يخمّن. الكلمة تظهر له وحده بالضغط المطوّل.</span></li>
       <li><i>٦</i><span>الدور يتبدّل بعد كل سؤال، واللي يجمع <b>نقاط أكثر</b> يطلع ونّاس السهرة. الأسئلة تتغيّر من سهرة لسهرة.</span></li>
+      <li><i>٧</i><span><b>اللعب بغرفة:</b> اضغط «أنشئ غرفة» وابعت الكود لأصحابك. كل واحد يدخل من جواله ويختار فريقه (لحد ٦). الأسئلة بتطلع <b>اختيارات</b> واللعبة بتحكم لحالها، وإذا غلط الفريق بتصير <b>فرصة سرقة</b> للفريق التاني.</span></li>
     </ul>
   </div>
 </div>
