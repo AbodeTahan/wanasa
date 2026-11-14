@@ -1,5 +1,5 @@
 /* وَنّاسة — يخلي اللعبة تشتغل كتطبيق وحتى بدون إنترنت */
-const VERSION = 'wanasa-0c1181f0';
+const VERSION = 'wanasa-313ee03d';
 const CORE = [
   './', 'index.html', 'play.html', 'about.html', 'contact.html', 'privacy.html', 'terms.html', '404.html',
   'assets/app.js', 'assets/site.css', 'assets/site.js', 'assets/logo.svg',
@@ -34,7 +34,7 @@ self.addEventListener('fetch', e => {
   // ملفات الموقع: من الشبكة أولًا عشان التحديثات توصل فورًا، ومن الكاش لو ما في نت
   if (url.origin === location.origin) {
     e.respondWith(
-      fetch(req).then(res => { if (res.ok) { const copy = res.clone(); caches.open(VERSION).then(c => c.put(req, copy)); } return res; })
+      fetch(req, { cache: 'no-cache' }).then(res => { if (res.ok) { const copy = res.clone(); caches.open(VERSION).then(c => c.put(req, copy)); } return res; })
         .catch(() => caches.match(req))
     );
     return;
