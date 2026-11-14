@@ -25,7 +25,7 @@ self.addEventListener('fetch', e => {
   // الصفحات: من الشبكة أولًا عشان التحديثات توصل، ومن الكاش لو ما في نت
   if (req.mode === 'navigate') {
     e.respondWith(
-      fetch(req).then(res => { const copy = res.clone(); caches.open(VERSION).then(c => c.put(req, copy)); return res; })
+      fetch(req.url, { cache: 'no-cache', credentials: 'same-origin' }).then(res => { const copy = res.clone(); caches.open(VERSION).then(c => c.put(req, copy)); return res; })
         .catch(() => caches.match(req).then(r => r || caches.match('play.html')))
     );
     return;
