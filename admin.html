@@ -42,6 +42,7 @@ table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:9px 10px;
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script>
 const ADMIN='wanassastudio@gmail.com';
+if(typeof firebase==='undefined'){document.getElementById('app').innerHTML='<div class="card"><p class="err">ما قدرت أحمّل الخدمة. تأكد من الإنترنت وحدّث الصفحة.</p></div>';throw new Error('firebase')}
 firebase.initializeApp({apiKey:'AIzaSyCvlp6OyDqQwA3nnfNzOa_qEaGZbOuWzJs',authDomain:'wanasa-game.firebaseapp.com',projectId:'wanasa-game',storageBucket:'wanasa-game.firebasestorage.app',messagingSenderId:'64444025204',appId:'1:64444025204:web:46fcec66d746ffb3264421'});
 const auth=firebase.auth(),db=firebase.firestore();auth.languageCode='ar';
 const $=id=>document.getElementById(id),app=$('app');

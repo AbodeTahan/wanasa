@@ -854,6 +854,10 @@ main>section:not([hidden]){animation:fade .3s both}
 .r-cup{font-size:64px;line-height:1}
 .r-end{gap:14px;padding:36px 20px}
 /* الحسابات والتقييم */
+html,body{overflow-x:clip}
+@media (max-width:560px){.nav{gap:8px}.nav-actions{gap:5px;flex-wrap:nowrap}.nav-actions .icon-btn{width:36px;height:36px;border-radius:11px}.nav-actions .icon-btn svg{width:19px;height:19px}
+#fsBtn,#helpBtn{display:none}.acc-btn{padding:0;width:36px;height:36px;justify-content:center;border-radius:11px}.acc-btn span{display:none}.acc-btn:not(.in)::after{content:'';position:absolute;top:5px;inset-inline-end:5px;width:7px;height:7px;border-radius:50%;background:var(--gold)}.acc-btn{position:relative}.brand .mark-wide{width:96px;height:auto}}
+
 #accOverlay{z-index:85}.acc-form label:focus-within,.reg-card label:focus-within{outline:none}.acc-form input:focus,.acc-form select:focus,.fb-card textarea:focus{outline:2px solid var(--gold);outline-offset:1px}#fbOverlay{z-index:86}
 .acc-card,.fb-card{position:relative;max-width:520px;max-height:calc(100dvh - 32px);overflow:auto}
 .acc-x{position:absolute;top:12px;inset-inline-start:12px;font-size:16px}
@@ -956,7 +960,7 @@ main>section:not([hidden]){animation:fade .3s both}
       <nav class="sf-links" aria-label="روابط الموقع"><a href="./">الرئيسية</a><a href="about.html">من نحن</a><a href="contact.html">تواصل معنا</a><a href="privacy.html">سياسة الخصوصية</a><a href="terms.html">شروط الاستخدام</a></nav>
       <div class="socials"><a class="soc soc-mail" href="contact.html" aria-label="البريد الإلكتروني" title="البريد الإلكتروني"><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M4 7l8 6 8-6"/></svg></a></div>
     </div>
-    <p class="sf-copy">© ٢٠٢٦ وَنّاسة. جميع الحقوق محفوظة · تصميم وتطوير <a href="about.html">م. عبد الرحمن الطحان</a></p>
+    <p class="sf-copy">© ٢٠٢٦ وَنّاسة · من <a href="about.html">Ludeva Studio</a>. جميع الحقوق محفوظة · تصميم وتطوير <a href="about.html">م. عبد الرحمن الطحان</a></p>
   </footer>
 </section>
 
@@ -1162,7 +1166,7 @@ Promise.all(p).catch(function(){}).then(function(){location.replace(location.pat
 window.addEventListener('error',function(e){if(!window.__wnOK&&e&&(e.filename||'').indexOf('app.js')>=0)setTimeout(fix,300)});
 setTimeout(fix,8000);})();
 </script>
-<script src="assets/app.js?v=16a5e282"></script>
+<script src="assets/app.js?v=ac0b3118"></script>
 
 
 </body>
