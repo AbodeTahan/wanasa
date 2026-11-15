@@ -60,6 +60,7 @@ auth.onAuthStateChanged(async u=>{
   await u.reload();u=auth.currentUser;
   if(!u.emailVerified){app.innerHTML=`<div class="card login"><h2>أكّد إيميلك أول</h2><p class="muted">بعتنالك رابط تأكيد على ${ADMIN}. اكبس عليه، وبعدين حدّث الصفحة.</p><button class="btn gold" id="rs">ابعت الرابط مرة تانية</button> <button class="btn" onclick="location.reload()">حدّثت</button> <button class="btn" id="lo">خروج</button></div>`;
     $('rs').onclick=()=>u.sendEmailVerification().then(()=>alert('انبعت')).catch(()=>{});$('lo').onclick=()=>auth.signOut();return}
+  await u.getIdToken(true);
   $('who').innerHTML=esc(u.email)+' · <a href="#" id="lo" style="color:var(--gold)">خروج</a>';$('lo').onclick=e=>{e.preventDefault();auth.signOut()};
   load()});
 async function load(){app.innerHTML='<p class="muted">جاري جلب البيانات…</p>';
