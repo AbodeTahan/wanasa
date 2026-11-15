@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>لوحة ونّاسة</title>
+<link rel="icon" href="assets/logo.svg">
+<style>
+:root{--bg:#10131f;--s1:#1a1f33;--s2:#232a44;--line:#2f3756;--t:#eef0fa;--m:#a7adc8;--gold:#ffb84d;--good:#34d399;--bad:#fb7185}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font-family:system-ui,"Segoe UI",Tahoma,sans-serif;line-height:1.6}
+.wrap{max-width:1100px;margin:auto;padding:20px 16px 60px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+header h1{margin:0;font-size:22px;display:flex;align-items:center;gap:10px}header img{width:40px;height:40px}
+.card{background:var(--s1);border:1px solid var(--line);border-radius:18px;padding:18px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
+.kpi b{display:block;font-size:30px;color:var(--gold)}.kpi span{color:var(--m);font-size:14px}
+.tabs{display:flex;gap:8px;margin:8px 0 14px;flex-wrap:wrap}
+.tab{font:inherit;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:var(--s2);color:var(--t);cursor:pointer}.tab.on{background:var(--gold);color:#1a1300;border-color:var(--gold);font-weight:700}
+.btn{font:inherit;font-weight:700;padding:10px 18px;border-radius:12px;border:1px solid var(--line);background:var(--s2);color:var(--t);cursor:pointer}.btn.gold{background:var(--gold);color:#1a1300;border-color:var(--gold)}
+input{font:inherit;font-size:16px;width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--t)}
+label{display:flex;flex-direction:column;gap:6px;font-weight:600;margin-bottom:10px}
+.login{max-width:420px;margin:60px auto;text-align:center}.login form{text-align:start}
+.err{color:var(--bad);min-height:1.4em}
+.scroll{overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:start;vertical-align:top}th{color:var(--m);font-weight:600;white-space:nowrap}
+.fb{display:flex;flex-direction:column;gap:10px}.fb .item{background:var(--s2);border-radius:14px;padding:12px 14px}
+.fb .meta{display:flex;gap:10px;flex-wrap:wrap;color:var(--m);font-size:13px}.fb .txt{margin:6px 0 0;white-space:pre-wrap}
+.pill{display:inline-block;padding:1px 9px;border-radius:999px;font-size:12px;background:var(--line)}.pill.rating{background:rgba(255,184,77,.2);color:var(--gold)}.pill.bug{background:rgba(251,113,133,.2);color:var(--bad)}.pill.idea{background:rgba(52,211,153,.2);color:var(--good)}
+.stars{color:var(--gold);letter-spacing:2px}
+.bars div{display:grid;grid-template-columns:150px 1fr 40px;gap:8px;align-items:center;margin:6px 0;font-size:14px}.bars i{display:block;height:10px;border-radius:9px;background:var(--gold)}
+.muted{color:var(--m)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><h1><img src="assets/logo.svg" alt="">لوحة ونّاسة ستوديو</h1><div id="who" class="muted"></div></header>
+  <div id="app"><p class="muted">جاري التحميل…</p></div>
+</div>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script>
+const ADMIN='wanassastudio@gmail.com';
+firebase.initializeApp({apiKey:'AIzaSyCvlp6OyDqQwA3nnfNzOa_qEaGZbOuWzJs',authDomain:'wanasa-game.firebaseapp.com',projectId:'wanasa-game',storageBucket:'wanasa-game.firebasestorage.app',messagingSenderId:'64444025204',appId:'1:64444025204:web:46fcec66d746ffb3264421'});
+const auth=firebase.auth(),db=firebase.firestore();auth.languageCode='ar';
+const $=id=>document.getElementById(id),app=$('app');
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const dt=t=>t&&t.toDate?t.toDate().toLocaleString('ar-EG',{dateStyle:'medium',timeStyle:'short'}):'—';
+const n=x=>Number(x).toLocaleString('ar-EG');
+let CATN={};
+function login(msg){$('who').textContent='';app.innerHTML=`<div class="card login"><h2>دخول الإدارة</h2><p class="muted">ادخل بحساب ${ADMIN} اللي عملته بلعبة ونّاسة.</p>
+<form id="lf"><label>الإيميل<input id="le" type="email" dir="ltr" value="${ADMIN}"></label><label>كلمة السر<input id="lp" type="password" dir="ltr"></label>
+<p class="err" id="lerr">${msg||''}</p><button class="btn gold" style="width:100%">دخول</button></form>
+<p class="muted" style="font-size:13px">ما عندك حساب؟ افتح <a href="play.html" style="color:var(--gold)">اللعبة</a> واعمل حساب بهالإيميل، وأكّد الإيميل من الرسالة اللي بتوصلك.</p></div>`;
+ $('lf').onsubmit=async e=>{e.preventDefault();$('lerr').textContent='';try{await auth.signInWithEmailAndPassword($('le').value.trim(),$('lp').value)}catch(x){$('lerr').textContent='الإيميل أو كلمة السر غلط.'}}}
+auth.onAuthStateChanged(async u=>{
+  if(!u)return login();
+  if(u.email!==ADMIN){await auth.signOut();return login('هالحساب ما عنده صلاحية الإدارة.')}
+  await u.reload();u=auth.currentUser;
+  if(!u.emailVerified){app.innerHTML=`<div class="card login"><h2>أكّد إيميلك أول</h2><p class="muted">بعتنالك رابط تأكيد على ${ADMIN}. اكبس عليه، وبعدين حدّث الصفحة.</p><button class="btn gold" id="rs">ابعت الرابط مرة تانية</button> <button class="btn" onclick="location.reload()">حدّثت</button> <button class="btn" id="lo">خروج</button></div>`;
+    $('rs').onclick=()=>u.sendEmailVerification().then(()=>alert('انبعت')).catch(()=>{});$('lo').onclick=()=>auth.signOut();return}
+  $('who').innerHTML=esc(u.email)+' · <a href="#" id="lo" style="color:var(--gold)">خروج</a>';$('lo').onclick=e=>{e.preventDefault();auth.signOut()};
+  load()});
+async function load(){app.innerHTML='<p class="muted">جاري جلب البيانات…</p>';
+  try{const [us,fs]=await Promise.all([db.collection('users').orderBy('created','desc').limit(1000).get(),db.collection('feedback').orderBy('created','desc').limit(1000).get()]);
+    const U=us.docs.map(d=>({id:d.id,...d.data()})),F=fs.docs.map(d=>({id:d.id,...d.data()}));draw(U,F)}
+  catch(e){app.innerHTML='<div class="card"><p class="err">ما قدرت أجيب البيانات: '+esc(e.message)+'</p></div>'}}
+let TAB='fb';
+function draw(U,F){
+  const R=F.filter(f=>f.rating),avg=R.length?(R.reduce((a,f)=>a+f.rating,0)/R.length):0,week=Date.now()-7*864e5;
+  const newW=U.filter(u=>u.created&&u.created.toMillis()>week).length,plays=U.reduce((a,u)=>a+(u.plays||0),0);
+  const fav={};U.forEach(u=>(u.favCats||[]).forEach(c=>fav[c]=(fav[c]||0)+1));const top=Object.entries(fav).sort((a,b)=>b[1]-a[1]).slice(0,12),mx=top.length?top[0][1]:1;
+  const cnt=(arr,k)=>{const o={};arr.forEach(x=>{if(x[k])o[x[k]]=(o[x[k]]||0)+1});return Object.entries(o).sort((a,b)=>b[1]-a[1])};
+  app.innerHTML=`<div class="kpis">
+   <div class="card kpi"><b>${n(U.length)}</b><span>حساب مسجّل</span></div>
+   <div class="card kpi"><b>${n(newW)}</b><span>حساب جديد هالأسبوع</span></div>
+   <div class="card kpi"><b>${avg?avg.toFixed(1):'—'} <small class="stars">★</small></b><span>متوسط التقييم (${n(R.length)} تقييم)</span></div>
+   <div class="card kpi"><b>${n(F.length-R.length)}</b><span>اقتراح وملاحظة</span></div>
+   <div class="card kpi"><b>${n(plays)}</b><span>سهرة لعبها أصحاب الحسابات</span></div></div>
+  <div class="tabs"><button class="tab" data-t="fb">التقييمات والاقتراحات</button><button class="tab" data-t="us">اللاعبين</button><button class="tab" data-t="st">إحصائيات</button><button class="btn" id="rf" style="margin-inline-start:auto">تحديث</button></div>
+  <div id="pane"></div>`;
+  document.querySelectorAll('.tab').forEach(b=>{b.classList.toggle('on',b.dataset.t===TAB);b.onclick=()=>{TAB=b.dataset.t;draw(U,F)}});$('rf').onclick=load;
+  const P=$('pane');const TY={rating:'تقييم',idea:'اقتراح',bug:'مشكلة',other:'رسالة'};
+  if(TAB==='fb')P.innerHTML=F.length?'<div class="fb">'+F.map(f=>`<div class="item"><div class="meta"><span class="pill ${f.type}">${TY[f.type]||f.type}</span>${f.rating?'<span class="stars">'+'★'.repeat(f.rating)+'<span style="color:var(--line)">'+'★'.repeat(5-f.rating)+'</span></span>':''}<span>${esc(f.name||'ضيف')}</span><span>${dt(f.created)}</span><span>${f.ctx==='end'?'بعد سهرة':f.ctx==='room'?'من غرفة':'من القائمة'}</span></div>${f.text?'<p class="txt">'+esc(f.text)+'</p>':''}</div>`).join('')+'</div>':'<div class="card muted">لسا ما في تقييمات.</div>';
+  if(TAB==='us')P.innerHTML=`<div class="card scroll"><table><thead><tr><th>الاسم</th><th>الإيميل</th><th>الفئات المفضلة</th><th>العمر</th><th>عرف عنّا من</th><th>سهرات</th><th>التسجيل</th><th>آخر دخول</th></tr></thead><tbody>${U.map(u=>`<tr><td>${esc(u.name)}</td><td dir="ltr">${esc(u.email)}</td><td>${esc((u.favCats||[]).map(c=>CATN[c]||c).join('، '))}</td><td>${esc(u.age||'—')}</td><td>${esc(u.heard||'—')}</td><td>${n(u.plays||0)}</td><td>${dt(u.created)}</td><td>${dt(u.lastSeen)}</td></tr>`).join('')}</tbody></table></div>`;
+  if(TAB==='st'){const bars=(rows,m)=>rows.map(([k,v])=>`<div><span>${esc(CATN[k]||k)}</span><i style="width:${Math.max(4,v/m*100)}%"></i><b>${n(v)}</b></div>`).join('');
+    const hd=cnt(U,'heard'),ag=cnt(U,'age');
+    P.innerHTML=`<div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))"><div class="card"><h3>أكثر الفئات المفضلة</h3><div class="bars">${top.length?bars(top,mx):'<p class="muted">لسا ما في بيانات.</p>'}</div></div>
+    <div class="card"><h3>كيف عرفوا فينا</h3><div class="bars">${hd.length?bars(hd,hd[0][1]):'<p class="muted">—</p>'}</div><h3>الأعمار</h3><div class="bars">${ag.length?bars(ag,ag[0][1]):'<p class="muted">—</p>'}</div></div></div>`}
+}
+fetch('assets/cats.json').then(r=>r.ok?r.json():{}).then(j=>{CATN=j}).catch(()=>{});
+</script>
+</body>
+</html>
