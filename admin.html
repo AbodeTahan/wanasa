@@ -42,13 +42,14 @@ table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:9px 10px;
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script>
 const ADMIN='wanassastudio@gmail.com';
-if(typeof firebase==='undefined'){document.getElementById('app').innerHTML='<div class="card"><p class="err">ما قدرت أحمّل الخدمة. تأكد من الإنترنت وحدّث الصفحة.</p></div>';throw new Error('firebase')}
+if(typeof firebase==='undefined'){document.getElementById('app').innerHTML='<div class="card"><p class="err">ما قدرت أحمّل الخدمة. تأكد من الإنترنت وحدّث الصفحة.</p></div>';}else{
 firebase.initializeApp({apiKey:'AIzaSyCvlp6OyDqQwA3nnfNzOa_qEaGZbOuWzJs',authDomain:'wanasa-game.firebaseapp.com',projectId:'wanasa-game',storageBucket:'wanasa-game.firebasestorage.app',messagingSenderId:'64444025204',appId:'1:64444025204:web:46fcec66d746ffb3264421'});
 const auth=firebase.auth(),db=firebase.firestore();auth.languageCode='ar';
 const $=id=>document.getElementById(id),app=$('app');
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const dt=t=>t&&t.toDate?t.toDate().toLocaleString('ar-EG',{dateStyle:'medium',timeStyle:'short'}):'—';
 const n=x=>Number(x).toLocaleString('ar-EG');
+const R5=r=>Number.isInteger(r)&&r>=1&&r<=5?r:0;
 let CATN={};
 function login(msg){$('who').textContent='';app.innerHTML=`<div class="card login"><h2>دخول الإدارة</h2><p class="muted">ادخل بحساب ${ADMIN} اللي عملته بلعبة ونّاسة.</p>
 <form id="lf"><label>الإيميل<input id="le" type="email" dir="ltr" value="${ADMIN}"></label><label>كلمة السر<input id="lp" type="password" dir="ltr"></label>
@@ -70,7 +71,7 @@ async function load(){app.innerHTML='<p class="muted">جاري جلب البيا
   catch(e){app.innerHTML='<div class="card"><p class="err">ما قدرت أجيب البيانات: '+esc(e.message)+'</p></div>'}}
 let TAB='fb';
 function draw(U,F){
-  const R=F.filter(f=>f.rating),avg=R.length?(R.reduce((a,f)=>a+f.rating,0)/R.length):0,week=Date.now()-7*864e5;
+  const R=F.filter(f=>R5(f.rating)),avg=R.length?(R.reduce((a,f)=>a+R5(f.rating),0)/R.length):0,week=Date.now()-7*864e5;
   const newW=U.filter(u=>u.created&&u.created.toMillis()>week).length,plays=U.reduce((a,u)=>a+(u.plays||0),0);
   const fav={};U.forEach(u=>(u.favCats||[]).forEach(c=>fav[c]=(fav[c]||0)+1));const top=Object.entries(fav).sort((a,b)=>b[1]-a[1]).slice(0,12),mx=top.length?top[0][1]:1;
   const cnt=(arr,k)=>{const o={};arr.forEach(x=>{if(x[k])o[x[k]]=(o[x[k]]||0)+1});return Object.entries(o).sort((a,b)=>b[1]-a[1])};
@@ -84,7 +85,7 @@ function draw(U,F){
   <div id="pane"></div>`;
   document.querySelectorAll('.tab').forEach(b=>{b.classList.toggle('on',b.dataset.t===TAB);b.onclick=()=>{TAB=b.dataset.t;draw(U,F)}});$('rf').onclick=load;
   const P=$('pane');const TY={rating:'تقييم',idea:'اقتراح',bug:'مشكلة',other:'رسالة'};
-  if(TAB==='fb')P.innerHTML=F.length?'<div class="fb">'+F.map(f=>`<div class="item"><div class="meta"><span class="pill ${f.type}">${TY[f.type]||f.type}</span>${f.rating?'<span class="stars">'+'★'.repeat(f.rating)+'<span style="color:var(--line)">'+'★'.repeat(5-f.rating)+'</span></span>':''}<span>${esc(f.name||'ضيف')}</span><span>${dt(f.created)}</span><span>${f.ctx==='end'?'بعد سهرة':f.ctx==='room'?'من غرفة':'من القائمة'}</span></div>${f.text?'<p class="txt">'+esc(f.text)+'</p>':''}</div>`).join('')+'</div>':'<div class="card muted">لسا ما في تقييمات.</div>';
+  if(TAB==='fb')P.innerHTML=F.length?'<div class="fb">'+F.map(f=>`<div class="item"><div class="meta"><span class="pill ${TY[f.type]?f.type:''}">${esc(TY[f.type]||f.type)}</span>${R5(f.rating)?'<span class="stars">'+'★'.repeat(R5(f.rating))+'<span style="color:var(--line)">'+'★'.repeat(5-R5(f.rating))+'</span></span>':''}<span>${esc(f.name||'ضيف')}</span><span>${dt(f.created)}</span><span>${f.ctx==='end'?'بعد سهرة':f.ctx==='room'?'من غرفة':'من القائمة'}</span></div>${f.text?'<p class="txt">'+esc(f.text)+'</p>':''}</div>`).join('')+'</div>':'<div class="card muted">لسا ما في تقييمات.</div>';
   if(TAB==='us')P.innerHTML=`<div class="card scroll"><table><thead><tr><th>الاسم</th><th>الإيميل</th><th>الفئات المفضلة</th><th>العمر</th><th>عرف عنّا من</th><th>سهرات</th><th>التسجيل</th><th>آخر دخول</th></tr></thead><tbody>${U.map(u=>`<tr><td>${esc(u.name)}</td><td dir="ltr">${esc(u.email)}</td><td>${esc((u.favCats||[]).map(c=>CATN[c]||c).join('، '))}</td><td>${esc(u.age||'—')}</td><td>${esc(u.heard||'—')}</td><td>${n(u.plays||0)}</td><td>${dt(u.created)}</td><td>${dt(u.lastSeen)}</td></tr>`).join('')}</tbody></table></div>`;
   if(TAB==='st'){const bars=(rows,m)=>rows.map(([k,v])=>`<div><span>${esc(CATN[k]||k)}</span><i style="width:${Math.max(4,v/m*100)}%"></i><b>${n(v)}</b></div>`).join('');
     const hd=cnt(U,'heard'),ag=cnt(U,'age');
@@ -92,6 +93,7 @@ function draw(U,F){
     <div class="card"><h3>كيف عرفوا فينا</h3><div class="bars">${hd.length?bars(hd,hd[0][1]):'<p class="muted">—</p>'}</div><h3>الأعمار</h3><div class="bars">${ag.length?bars(ag,ag[0][1]):'<p class="muted">—</p>'}</div></div></div>`}
 }
 fetch('assets/cats.json').then(r=>r.ok?r.json():{}).then(j=>{CATN=j}).catch(()=>{});
+}
 </script>
 </body>
 </html>
