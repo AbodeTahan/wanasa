@@ -1,5 +1,5 @@
 /* وَنّاسة — يخلي اللعبة تشتغل كتطبيق وحتى بدون إنترنت */
-const VERSION = 'wanasa-4e1510ad';
+const VERSION = 'wanasa-e06ebdd1';
 const CORE = [
   './', 'index.html', 'play.html', 'about.html', 'contact.html', 'privacy.html', 'terms.html', '404.html',
   'assets/app.js', 'assets/site.css', 'assets/site.js', 'assets/logo.svg',

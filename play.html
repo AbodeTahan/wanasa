@@ -206,7 +206,7 @@ button:focus-visible,input:focus-visible,label:focus-within{outline:3px solid va
 .score.bump{animation:bump .6s}
 @keyframes bump{35%{transform:scale(1.22)}70%{transform:scale(.96)}}
 .adj{display:flex;gap:6px}
-.adj button{width:34px;height:34px;border-radius:10px;background:rgba(0,0,0,.25);border:1px solid var(--line);font-weight:700;font-size:18px;line-height:1;transition:transform .12s,border-color .12s}
+.adj button{width:44px;height:44px;border-radius:10px;background:rgba(0,0,0,.25);border:1px solid var(--line);font-weight:700;font-size:18px;line-height:1;transition:transform .12s,border-color .12s}
 .adj button:hover{border-color:var(--gold)}
 .adj button:active{transform:scale(.88)}
 .helps{display:flex;flex-wrap:wrap;gap:6px}
@@ -278,7 +278,7 @@ button:focus-visible,input:focus-visible,label:focus-within{outline:3px solid va
 .toolrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
 .helpers-q{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .helpers-q>span{font-size:14px;color:var(--muted)}
-.hbtn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:12px;border:1px dashed var(--gold);color:var(--gold);font-weight:700;font-size:15px;transition:background .15s,transform .15s}
+.hbtn{display:inline-flex;align-items:center;min-height:44px;gap:6px;padding:8px 14px;border-radius:12px;border:1px dashed var(--gold);color:var(--gold);font-weight:700;font-size:15px;transition:background .15s,transform .15s}
 .hbtn:hover:not(:disabled){background:rgba(255,192,77,.12);transform:translateY(-2px)}
 .hbtn.active{background:var(--gold);color:var(--ink);border-style:solid;animation:bounce .5s}
 .hbtn:disabled:not(.active){opacity:.3;cursor:not-allowed}
@@ -1167,7 +1167,7 @@ Promise.all(p).catch(function(){}).then(function(){location.replace(location.pat
 window.addEventListener('error',function(e){if(!window.__wnOK&&e&&(e.filename||'').indexOf('app.js')>=0)setTimeout(fix,300)});
 setTimeout(fix,8000);})();
 </script>
-<script src="assets/app.js?v=e1415cf7"></script>
+<script src="assets/app.js?v=55a3d406"></script>
 
 
 </body>
