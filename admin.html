@@ -45,12 +45,13 @@ const ADMIN='wanassastudio@gmail.com';
 if(typeof firebase==='undefined'){document.getElementById('app').innerHTML='<div class="card"><p class="err">ما قدرت أحمّل الخدمة. تأكد من الإنترنت وحدّث الصفحة.</p></div>';}else{
 firebase.initializeApp({apiKey:'AIzaSyCvlp6OyDqQwA3nnfNzOa_qEaGZbOuWzJs',authDomain:'wanasa-game.firebaseapp.com',projectId:'wanasa-game',storageBucket:'wanasa-game.firebasestorage.app',messagingSenderId:'64444025204',appId:'1:64444025204:web:46fcec66d746ffb3264421'});
 const auth=firebase.auth(),db=firebase.firestore();auth.languageCode='ar';
+if(/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&localStorage.getItem('wanasa-emu')==='1'){try{auth.useEmulator('http://127.0.0.1:9099');db.useEmulator('127.0.0.1',8080)}catch(e){}}
 const $=id=>document.getElementById(id),app=$('app');
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const dt=t=>t&&t.toDate?t.toDate().toLocaleString('ar-EG',{dateStyle:'medium',timeStyle:'short'}):'—';
 const n=x=>Number(x).toLocaleString('ar-EG');
 const R5=r=>Number.isInteger(r)&&r>=1&&r<=5?r:0;
-let CATN={};
+let CATN={};const GN={f:'بنت',m:'شاب',x:'بفضّل ما قول'};
 function login(msg){$('who').textContent='';app.innerHTML=`<div class="card login"><h2>دخول الإدارة</h2><p class="muted">ادخل بحساب ${ADMIN} اللي عملته بلعبة ونّاسة.</p>
 <form id="lf"><label>الإيميل<input id="le" type="email" dir="ltr" value="${ADMIN}"></label><label>كلمة السر<input id="lp" type="password" dir="ltr"></label>
 <p class="err" id="lerr">${msg||''}</p><button class="btn gold" style="width:100%">دخول</button>
@@ -94,10 +95,17 @@ function draw(U,F){
   if(TAB==='fb')P.querySelectorAll('.del').forEach(b=>b.onclick=async()=>{const id=b.dataset.id,f=F.find(x=>x.id===id);
     if(!confirm('أكيد بدك تحذف هالتقييم؟\n\n«'+((f&&f.text)||'بدون نص').slice(0,80)+'»\n\nالحذف نهائي وما بيرجع.'))return;
     b.disabled=true;try{await db.collection('feedback').doc(id).delete();F.splice(F.indexOf(f),1);draw(U,F)}catch(x){b.disabled=false;alert('ما قدرت احذفه: '+x.message)}});
-  if(TAB==='us')P.innerHTML=`<div class="card scroll"><table><thead><tr><th>الاسم</th><th>الإيميل</th><th>الفئات المفضلة</th><th>العمر</th><th>عرف عنّا من</th><th>سهرات</th><th>التسجيل</th><th>آخر دخول</th></tr></thead><tbody>${U.map(u=>`<tr><td>${esc(u.name)}</td><td dir="ltr">${esc(u.email)}</td><td>${esc((u.favCats||[]).map(c=>CATN[c]||c).join('، '))}</td><td>${esc(u.age||'—')}</td><td>${esc(u.heard||'—')}</td><td>${n(u.plays||0)}</td><td>${dt(u.created)}</td><td>${dt(u.lastSeen)}</td></tr>`).join('')}</tbody></table></div>`;
+  if(TAB==='us')P.innerHTML=`<div class="card scroll"><table><thead><tr><th>الاسم</th><th>الإيميل</th><th>الفئات المفضلة</th><th>العمر</th><th>عرف عنّا من</th><th>الجنس</th><th>سهرات</th><th>التسجيل</th><th>آخر دخول</th></tr></thead><tbody>${U.map(u=>`<tr><td>${esc(u.name)}</td><td dir="ltr">${esc(u.email)}</td><td>${esc((u.favCats||[]).map(c=>CATN[c]||c).join('، '))}</td><td>${esc(u.age||'—')}</td><td>${esc(u.heard||'—')}</td><td>${GN[u.gender]||'—'}</td><td>${n(u.plays||0)}</td><td>${dt(u.created)}</td><td>${dt(u.lastSeen)}</td></tr>`).join('')}</tbody></table></div>`;
   if(TAB==='st'){const bars=(rows,m)=>rows.map(([k,v])=>`<div><span>${esc(CATN[k]||k)}</span><i style="width:${Math.max(4,v/m*100)}%"></i><b>${n(v)}</b></div>`).join('');
     const hd=cnt(U,'heard'),ag=cnt(U,'age');
-    P.innerHTML=`<div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))"><div class="card"><h3>أكثر الفئات المفضلة</h3><div class="bars">${top.length?bars(top,mx):'<p class="muted">لسا ما في بيانات.</p>'}</div></div>
+    // الجنس + الفئات الأكتر لعبًا عند كل فئة (من سجل الأسئلة seen: كل مفتاح أوله اسم الفئة)
+    const gc={f:0,m:0,x:0,'':0};U.forEach(u=>{gc[GN[u.gender]?u.gender:'']++});
+    const played=g=>{const o={};U.filter(u=>(u.gender||'')===g).forEach(u=>(u.seen||[]).forEach(k=>{const c=String(k).split(':')[0];o[c]=(o[c]||0)+1}));return Object.entries(o).sort((a,b)=>b[1]-a[1]).slice(0,8)};
+    const pf=played('f'),pm=played('m');
+    P.innerHTML=`<div class="kpis"><div class="card kpi"><b>${n(gc.f)}</b><span>بنت</span></div><div class="card kpi"><b>${n(gc.m)}</b><span>شاب</span></div><div class="card kpi"><b>${n(gc.x+gc[''])}</b><span>ما حدّدوا</span></div></div>
+    <div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))"><div class="card"><h3>الأكتر لعبًا عند البنات</h3><div class="bars">${pf.length?bars(pf,pf[0][1]):'<p class="muted">لسا ما في بيانات.</p>'}</div></div>
+    <div class="card"><h3>الأكتر لعبًا عند الشباب</h3><div class="bars">${pm.length?bars(pm,pm[0][1]):'<p class="muted">لسا ما في بيانات.</p>'}</div></div></div>
+    <div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))"><div class="card"><h3>أكثر الفئات المفضلة</h3><div class="bars">${top.length?bars(top,mx):'<p class="muted">لسا ما في بيانات.</p>'}</div></div>
     <div class="card"><h3>كيف عرفوا فينا</h3><div class="bars">${hd.length?bars(hd,hd[0][1]):'<p class="muted">—</p>'}</div><h3>الأعمار</h3><div class="bars">${ag.length?bars(ag,ag[0][1]):'<p class="muted">—</p>'}</div></div></div>`}
 }
 fetch('assets/cats.json').then(r=>r.ok?r.json():{}).then(j=>{CATN=j}).catch(()=>{});
