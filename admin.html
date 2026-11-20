@@ -53,9 +53,14 @@ const R5=r=>Number.isInteger(r)&&r>=1&&r<=5?r:0;
 let CATN={};
 function login(msg){$('who').textContent='';app.innerHTML=`<div class="card login"><h2>دخول الإدارة</h2><p class="muted">ادخل بحساب ${ADMIN} اللي عملته بلعبة ونّاسة.</p>
 <form id="lf"><label>الإيميل<input id="le" type="email" dir="ltr" value="${ADMIN}"></label><label>كلمة السر<input id="lp" type="password" dir="ltr"></label>
-<p class="err" id="lerr">${msg||''}</p><button class="btn gold" style="width:100%">دخول</button></form>
+<p class="err" id="lerr">${msg||''}</p><button class="btn gold" style="width:100%">دخول</button>
+<p style="text-align:center;margin:10px 0 0"><a href="#" id="fp" style="color:var(--gold);font-size:14px">نسيت كلمة السر؟</a></p></form>
 <p class="muted" style="font-size:13px">ما عندك حساب؟ افتح <a href="play.html" style="color:var(--gold)">اللعبة</a> واعمل حساب بهالإيميل، وأكّد الإيميل من الرسالة اللي بتوصلك.</p></div>`;
- $('lf').onsubmit=async e=>{e.preventDefault();$('lerr').textContent='';try{await auth.signInWithEmailAndPassword($('le').value.trim(),$('lp').value)}catch(x){$('lerr').textContent='الإيميل أو كلمة السر غلط.'}}}
+ $('lf').onsubmit=async e=>{e.preventDefault();$('lerr').textContent='';try{await auth.signInWithEmailAndPassword($('le').value.trim(),$('lp').value)}catch(x){$('lerr').textContent='الإيميل أو كلمة السر غلط.'}};
+ $('fp').onclick=async e=>{e.preventDefault();const m=$('le').value.trim(),er=$('lerr');er.style.color='';
+  if(!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(m)){er.textContent='اكتب الإيميل أول.';return}
+  try{await auth.sendPasswordResetEmail(m);er.style.color='var(--good,#5fd38d)';er.textContent='بعتنا رابط تغيير كلمة السر على '+m+' 📩 إذا ما لقيته، شيّك Spam.'}
+  catch(x){er.textContent='ما قدرت ابعت الرابط، جرّب كمان شوي.'}}}
 auth.onAuthStateChanged(async u=>{
   if(!u)return login();
   if(u.email!==ADMIN){await auth.signOut();return login('هالحساب ما عنده صلاحية الإدارة.')}
@@ -85,7 +90,10 @@ function draw(U,F){
   <div id="pane"></div>`;
   document.querySelectorAll('.tab').forEach(b=>{b.classList.toggle('on',b.dataset.t===TAB);b.onclick=()=>{TAB=b.dataset.t;draw(U,F)}});$('rf').onclick=load;
   const P=$('pane');const TY={rating:'تقييم',idea:'اقتراح',bug:'مشكلة',other:'رسالة'};
-  if(TAB==='fb')P.innerHTML=F.length?'<div class="fb">'+F.map(f=>`<div class="item"><div class="meta"><span class="pill ${TY[f.type]?f.type:''}">${esc(TY[f.type]||f.type)}</span>${R5(f.rating)?'<span class="stars">'+'★'.repeat(R5(f.rating))+'<span style="color:var(--line)">'+'★'.repeat(5-R5(f.rating))+'</span></span>':''}<span>${esc(f.name||'ضيف')}</span><span>${dt(f.created)}</span><span>${f.ctx==='end'?'بعد سهرة':f.ctx==='room'?'من غرفة':'من القائمة'}</span></div>${f.text?'<p class="txt">'+esc(f.text)+'</p>':''}</div>`).join('')+'</div>':'<div class="card muted">لسا ما في تقييمات.</div>';
+  if(TAB==='fb')P.innerHTML=F.length?'<div class="fb">'+F.map(f=>`<div class="item"><div class="meta"><span class="pill ${TY[f.type]?f.type:''}">${esc(TY[f.type]||f.type)}</span>${R5(f.rating)?'<span class="stars">'+'★'.repeat(R5(f.rating))+'<span style="color:var(--line)">'+'★'.repeat(5-R5(f.rating))+'</span></span>':''}<span>${esc(f.name||'ضيف')}</span><span>${dt(f.created)}</span><span>${f.ctx==='end'?'بعد سهرة':f.ctx==='room'?'من غرفة':'من القائمة'}</span><button class="btn del" data-id="${esc(f.id)}" style="margin-inline-start:auto;padding:4px 10px;font-size:13px" title="حذف">🗑 حذف</button></div>${f.text?'<p class="txt">'+esc(f.text)+'</p>':''}</div>`).join('')+'</div>':'<div class="card muted">لسا ما في تقييمات.</div>';
+  if(TAB==='fb')P.querySelectorAll('.del').forEach(b=>b.onclick=async()=>{const id=b.dataset.id,f=F.find(x=>x.id===id);
+    if(!confirm('أكيد بدك تحذف هالتقييم؟\n\n«'+((f&&f.text)||'بدون نص').slice(0,80)+'»\n\nالحذف نهائي وما بيرجع.'))return;
+    b.disabled=true;try{await db.collection('feedback').doc(id).delete();F.splice(F.indexOf(f),1);draw(U,F)}catch(x){b.disabled=false;alert('ما قدرت احذفه: '+x.message)}});
   if(TAB==='us')P.innerHTML=`<div class="card scroll"><table><thead><tr><th>الاسم</th><th>الإيميل</th><th>الفئات المفضلة</th><th>العمر</th><th>عرف عنّا من</th><th>سهرات</th><th>التسجيل</th><th>آخر دخول</th></tr></thead><tbody>${U.map(u=>`<tr><td>${esc(u.name)}</td><td dir="ltr">${esc(u.email)}</td><td>${esc((u.favCats||[]).map(c=>CATN[c]||c).join('، '))}</td><td>${esc(u.age||'—')}</td><td>${esc(u.heard||'—')}</td><td>${n(u.plays||0)}</td><td>${dt(u.created)}</td><td>${dt(u.lastSeen)}</td></tr>`).join('')}</tbody></table></div>`;
   if(TAB==='st'){const bars=(rows,m)=>rows.map(([k,v])=>`<div><span>${esc(CATN[k]||k)}</span><i style="width:${Math.max(4,v/m*100)}%"></i><b>${n(v)}</b></div>`).join('');
     const hd=cnt(U,'heard'),ag=cnt(U,'age');
