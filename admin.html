@@ -76,6 +76,10 @@ async function load(){app.innerHTML='<p class="muted">جاري جلب البيا
     const U=us.docs.map(d=>({id:d.id,...d.data()})),F=fs.docs.map(d=>({id:d.id,...d.data()}));draw(U,F)}
   catch(e){app.innerHTML='<div class="card"><p class="err">ما قدرت أجيب البيانات: '+esc(e.message)+'</p></div>'}}
 let TAB='fb';
+// خلية «ونّاسة بلس» بجدول اللاعبين: الحالة + تفعيل بمدة + إلغاء
+function plusCell(u){const on=u.plan==='plus'&&(!u.planUntil||u.planUntil.toMillis()>Date.now()),id=esc(u.id);
+  return (on?`<b style="color:var(--gold)">✓ بلس</b> <small class="muted">${u.planUntil?'لـ '+dt(u.planUntil):'بلا نهاية'}</small> <button class="btn" data-plus="off" data-id="${id}" style="padding:2px 8px;font-size:12px">إلغاء</button>`:'')+
+    `<div style="display:flex;gap:4px;margin-top:4px"><select data-dur="${id}" style="font-size:12px"><option value="1">شهر</option><option value="3">٣ شهور</option><option value="12">سنة</option><option value="0">بلا نهاية</option></select><button class="btn" data-plus="on" data-id="${id}" style="padding:2px 8px;font-size:12px">🎁 فعّل بلس</button></div>`}
 function draw(U,F){
   const R=F.filter(f=>R5(f.rating)),avg=R.length?(R.reduce((a,f)=>a+R5(f.rating),0)/R.length):0,week=Date.now()-7*864e5;
   const newW=U.filter(u=>u.created&&u.created.toMillis()>week).length,plays=U.reduce((a,u)=>a+(u.plays||0),0);
@@ -87,7 +91,7 @@ function draw(U,F){
    <div class="card kpi"><b>${avg?avg.toFixed(1):'—'} <small class="stars">★</small></b><span>متوسط التقييم (${n(R.length)} تقييم)</span></div>
    <div class="card kpi"><b>${n(F.length-R.length)}</b><span>اقتراح وملاحظة</span></div>
    <div class="card kpi"><b>${n(plays)}</b><span>سهرة لعبها أصحاب الحسابات</span></div></div>
-  <div class="tabs"><button class="tab" data-t="fb">التقييمات والاقتراحات</button><button class="tab" data-t="us">اللاعبين</button><button class="tab" data-t="st">إحصائيات</button><button class="btn" id="rf" style="margin-inline-start:auto">تحديث</button></div>
+  <div class="tabs"><button class="tab" data-t="fb">التقييمات والاقتراحات</button><button class="tab" data-t="us">اللاعبين</button><button class="tab" data-t="st">إحصائيات</button><button class="tab" data-t="plus">ونّاسة بلس</button><button class="btn" id="rf" style="margin-inline-start:auto">تحديث</button></div>
   <div id="pane"></div>`;
   document.querySelectorAll('.tab').forEach(b=>{b.classList.toggle('on',b.dataset.t===TAB);b.onclick=()=>{TAB=b.dataset.t;draw(U,F)}});$('rf').onclick=load;
   const P=$('pane');const TY={rating:'تقييم',idea:'اقتراح',bug:'مشكلة',other:'رسالة'};
@@ -95,7 +99,23 @@ function draw(U,F){
   if(TAB==='fb')P.querySelectorAll('.del').forEach(b=>b.onclick=async()=>{const id=b.dataset.id,f=F.find(x=>x.id===id);
     if(!confirm('أكيد بدك تحذف هالتقييم؟\n\n«'+((f&&f.text)||'بدون نص').slice(0,80)+'»\n\nالحذف نهائي وما بيرجع.'))return;
     b.disabled=true;try{await db.collection('feedback').doc(id).delete();F.splice(F.indexOf(f),1);draw(U,F)}catch(x){b.disabled=false;alert('ما قدرت احذفه: '+x.message)}});
-  if(TAB==='us')P.innerHTML=`<div class="card scroll"><table><thead><tr><th>الاسم</th><th>الإيميل</th><th>الفئات المفضلة</th><th>العمر</th><th>عرف عنّا من</th><th>الجنس</th><th>سهرات</th><th>التسجيل</th><th>آخر دخول</th></tr></thead><tbody>${U.map(u=>`<tr><td>${esc(u.name)}</td><td dir="ltr">${esc(u.email)}</td><td>${esc((u.favCats||[]).map(c=>CATN[c]||c).join('، '))}</td><td>${esc(u.age||'—')}</td><td>${esc(u.heard||'—')}</td><td>${GN[u.gender]||'—'}</td><td>${n(u.plays||0)}</td><td>${dt(u.created)}</td><td>${dt(u.lastSeen)}</td></tr>`).join('')}</tbody></table></div>`;
+  if(TAB==='us')P.innerHTML=`<div class="card scroll"><table><thead><tr><th>الاسم</th><th>الإيميل</th><th>الفئات المفضلة</th><th>العمر</th><th>عرف عنّا من</th><th>الجنس</th><th>سهرات</th><th>التسجيل</th><th>آخر دخول</th><th>ونّاسة بلس</th></tr></thead><tbody>${U.map(u=>`<tr><td>${esc(u.name)}</td><td dir="ltr">${esc(u.email)}</td><td>${esc((u.favCats||[]).map(c=>CATN[c]||c).join('، '))}</td><td>${esc(u.age||'—')}</td><td>${esc(u.heard||'—')}</td><td>${GN[u.gender]||'—'}</td><td>${n(u.plays||0)}</td><td>${dt(u.created)}</td><td>${dt(u.lastSeen)}</td><td>${plusCell(u)}</td></tr>`).join('')}</tbody></table></div>`;
+  if(TAB==='us')P.querySelectorAll('[data-plus]').forEach(b=>b.onclick=async()=>{const u=U.find(x=>x.id===b.dataset.id);if(!u)return;
+    const act=b.dataset.plus;let upd;
+    if(act==='off'){if(!confirm('إلغاء «ونّاسة بلس» عن '+(u.name||u.email)+'؟'))return;upd={plan:'free',planUntil:null}}
+    else{const sel=P.querySelector('select[data-dur="'+u.id+'"]'),m=+sel.value;const until=m?firebase.firestore.Timestamp.fromDate(new Date(Date.now()+m*30*864e5)):null;
+      if(!confirm('تفعيل «ونّاسة بلس» لـ '+(u.name||u.email)+' '+(m?'لمدة '+sel.options[sel.selectedIndex].text:'بلا نهاية')+'؟'))return;upd={plan:'plus',planUntil:until}}
+    b.disabled=true;try{await db.collection('users').doc(u.id).update(upd);Object.assign(u,upd);draw(U,F)}catch(x){b.disabled=false;alert('ما زبط: '+x.message)}});
+  if(TAB==='plus'){P.innerHTML='<p class="muted">جاري جلب تصنيف الفئات…</p>';
+    db.collection('config').doc('tiers').get().then(d=>{const T=d.exists?d.data():{},ids=Object.keys(CATN).sort((a,b)=>String(CATN[a]).localeCompare(String(CATN[b]),'ar'));
+      const plusN=ids.filter(k=>T[k]==='plus').length,subs=U.filter(u=>u.plan==='plus'&&(!u.planUntil||u.planUntil.toMillis()>Date.now())).length;
+      P.innerHTML=`<div class="kpis"><div class="card kpi"><b>${n(plusN)}</b><span>فئة «بلس»</span></div><div class="card kpi"><b>${n(subs)}</b><span>حساب مفعّل عنده بلس</span></div></div>
+      <div class="card"><p class="muted">⚠️ القفل باللعبة لسا مطفي (PAYWALL_ENABLED=false). هالتصنيف بيتحضّر هلق، وبيصير فعّال بس ينشعل المفتاح.</p>
+      <div class="tiers">${ids.map(k=>`<label style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)"><span>${esc(CATN[k])}</span><select data-tier="${esc(k)}"><option value="free"${T[k]!=='plus'?' selected':''}>مجانية</option><option value="plus"${T[k]==='plus'?' selected':''}>🔒 بلس</option></select></label>`).join('')}</div>
+      <p style="margin-top:12px"><button class="btn gold" id="saveTiers">حفظ التصنيف</button> <span class="muted" id="tierMsg"></span></p></div>`;
+      $('saveTiers').onclick=async()=>{const out={};P.querySelectorAll('select[data-tier]').forEach(s=>{if(s.value==='plus')out[s.dataset.tier]='plus'});
+        $('saveTiers').disabled=true;try{await db.collection('config').doc('tiers').set(out);$('tierMsg').textContent='انحفظ ✓ ('+n(Object.keys(out).length)+' فئة بلس)'}catch(x){$('tierMsg').textContent='ما زبط: '+x.message}$('saveTiers').disabled=false}})
+    .catch(e=>{P.innerHTML='<div class="card"><p class="err">ما قدرت أجيب التصنيف: '+esc(e.message)+'</p></div>'})}
   if(TAB==='st'){const bars=(rows,m)=>rows.map(([k,v])=>`<div><span>${esc(CATN[k]||k)}</span><i style="width:${Math.max(4,v/m*100)}%"></i><b>${n(v)}</b></div>`).join('');
     const hd=cnt(U,'heard'),ag=cnt(U,'age');
     // الجنس + الفئات الأكتر لعبًا عند كل فئة (من سجل الأسئلة seen: كل مفتاح أوله اسم الفئة)
